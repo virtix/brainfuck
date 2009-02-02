@@ -4,6 +4,14 @@
 
 <cfscript>
 
+ function testURLEncodedInput(){
+  s = urlencodedformat(a);
+  debug(s);
+  bf.exec(urlEncodedBrainfuck=s,debug=true);
+  s = urldecode(s);
+  debug(s);
+  //bf.execute(s);
+ }
 
  function testInitProgramShouldReturnFuckingArrayList(){
    var list = bf.initProgram(a);

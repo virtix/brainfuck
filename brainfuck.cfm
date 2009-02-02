@@ -28,6 +28,8 @@
     bf = document.getElementById('src');
     alert(escape('[>+++++<-]]'));
     p = escape('+++++++++++++[>+++++<-]>.');
+    alert(p);
+    return;
     //p = '%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.';
     u = 'Brainfuck.cfc?method=exec&code=' + p;
     //$("#brainfucked").load(u);

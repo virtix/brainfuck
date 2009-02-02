@@ -119,6 +119,14 @@
     debugFlag = flag;
   }
 
+  function getDebug(){
+    return debugFlag;
+  }
+
+  function setInitialized(flag){
+    isInitialized =  flag;
+  }
+
 
 </cfscript>
 
@@ -129,12 +137,17 @@
  <cfthrow type="BrainfuckParserException" message="#arguments.message#" detail="#arguments.detail#" />
 </cffunction>
 
-<cffunction name="exec" access="remote">
-	<cfargument name="code" />
-	<cfsavecontent variable="v">
-  <cfset execute(urldecode(code))>
-  <!--- <cfset execute('++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.')> --->
-  </cfsavecontent><cfoutput>#trim((code))#</cfoutput>
+<cffunction name="exec" access="public" output="true">
+	<cfargument name="urlEncodedBrainfuck" />
+	<cfargument name="debug" required="false" default="false" />
+	<cfscript>
+	 var fuck = urldecode(arguments.urlEncodedBrainfuck);
+	 brainBugger.__dump(fuck);
+	 setDebug(arguments.debug);
+
+	 execute( fuck );
+	 if(getDebug()) printDebug();
+	</cfscript>
 </cffunction>
 
 <cffunction name="printDebug">
