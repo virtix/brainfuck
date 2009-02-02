@@ -114,13 +114,6 @@
   }
 
 
-/*--------------------------------------------------------------------
-    					      Debug utilities
-    				  To Do: Place in separate object
---------------------------------------------------------------------*/
-  function printDebug(){
-    brainBugger.printDebug();
-  }
 
   function setDebug(flag){
     debugFlag = flag;
@@ -136,7 +129,20 @@
  <cfthrow type="BrainfuckParserException" message="#arguments.message#" detail="#arguments.detail#" />
 </cffunction>
 
+<cffunction name="exec" access="remote">
+	<cfargument name="code" />
+	<cfsavecontent variable="v">
+  <cfset execute(urldecode(code))>
+  <!--- <cfset execute('++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.')> --->
+  </cfsavecontent><cfoutput>#trim((code))#</cfoutput>
+</cffunction>
 
+<cffunction name="printDebug">
+ <cfscript>
+  	if(!debugFlag) writeoutput('<p><strong>Warning</strong>: Looks like setBug() is false. Set it to true to capture debug data.</p>');
+    brainBugger.printDebug();
+  </cfscript>
+</cffunction>
 
 </cfcomponent>
 

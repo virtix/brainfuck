@@ -92,6 +92,20 @@ function testArrayIdentify(a,b){
   }
 	</cfscript>
 
+
+<cffunction name="template" access="private">
+  <cfscript>
+
+	</cfscript>
+</cffunction>
+
+
+<cffunction name="template" access="private">
+  <cfscript>
+
+	</cfscript>
+</cffunction>
+
  <cffunction name="changeArray" access="private">
 	 <cfargument name="a2" type="any" />
    <cfset a2.remove(1)>
