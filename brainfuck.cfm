@@ -26,26 +26,28 @@
 
   function fuckme(){
     bf = document.getElementById('src');
-    alert(escape('[>+++++<-]]'));
-    p = escape('+++++++++++++[>+++++<-]>.');
-    alert(p);
-    return;
-    //p = '%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.';
-    u = 'Brainfuck.cfc?method=exec&code=' + p;
+    //alert(escape('[>+++++<-]]'));
+    //p = escape('+++++++++++++[>+++++<-]>.');
+    //alert(p);
+    //return;
+    p = '%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.';
+    u = 'Brainfuck.cfc?method=exec&urlEncodedBrainfuck=' + p;
     //$("#brainfucked").load(u);
 
 $.ajax({
-    url: u + p,
-    type: 'POST',
-    dataType: 'html',
+    url: u ,
+    type: 'get',
+    dataType: 'json',
     timeout: 1000,
-    error: function(){
-        alert('Error loading document');
+    error: function(x){
+        alert(x.responseXML);
     },
     success: function(data){
+    	alert(data);
+    	/*
          $('#brainfucked')
             .html(data)
-
+        */   
     }
 });
 

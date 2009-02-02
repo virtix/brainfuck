@@ -1,12 +1,14 @@
 <cfcomponent output="true">
-
+<cfsetting showdebugoutput="false">
   <cfscript>
 
      raw = '';
      program = [];
+     brainFuckBuffer = []; //results cache
      pc = 1;
      debugFlag = false;
      isInitialized =  false;
+     outputFormat = 'text';
      parser = createObject('component','BrainfuckParser');
      brainBugger = createObject('component','BrainfuckDebugger');
 
@@ -26,7 +28,7 @@
       bytes = initProgram(bytes);
     }
 
-   for(i; i <=  arrayLen(bytes); i++){
+   for(i=1; i <=  arrayLen(bytes); i++){
       byte = bytes[i];
       if (debugFlag) brainBugger.debug(byte,pc,program);
 
@@ -61,7 +63,9 @@
        break;
 
        case 46: // .
-         writeoutput( chr(program[pc]) );
+         //writeoutput( chr(program[pc]) );
+         collect(program[pc]);
+         //to do. collect and 'then' print.
        break;
 
        case 44: // , : accept input ... ?
@@ -77,9 +81,13 @@
           parser.refactorArrayReference(bytes,pos.end);
           execute(bytes);
           return;
+          //Still something wrong with the above logic. Shouldn't
+          //have to call execute() and return. Should proceed to next
+          //loop iteration and use the refactored bytes. But, for some
+          //reason, it's failing by hitting the next case 93: ...
 
        case 93: // ]
-         __throw('Unbalanced Brackets.','Should never get here  #i#: #matcher.convertBytesToBrainfuck(localBytes)#');
+         __throw('Unbalanced Brackets.','Should never get here  #i#: #parser.convertBytesToBrainfuck(bytes)#');
        break;
 
        default: //no worries. we only care about the other stuff
@@ -90,16 +98,36 @@
      if( pc > 100 || pc < 0) __throw('Range error','loops can kill');
 
     }//end for
-
+   
   }//end execute
 
+  function interpret(code){
+    execute(code);
+    print();
+  }
+  
+  function collect(byte){
+    brainFuckBuffer.add(chr(byte));
+  }
+  
+  function getBrainfuckBuffer(){
+    return brainFuckBuffer;
+  }
 
+  function print(){
+   var i = 1;
+   for(i; i <= brainFuckBuffer.size();i++){
+     writeoutput(brainFuckBuffer[i]);
+   }
+  }
+  
  //do only once
   function initProgram(code){
     var i = 1;
     var temp = code.getBytes();
     var bytes = createObject('java','java.util.ArrayList').init();
     raw = arguments.code;
+    parser.parse(bytes);
     if(debugFlag){
      brainBugger.init(code);
     }
@@ -130,6 +158,18 @@
 
 </cfscript>
 
+<cffunction name="exec" access="remote" output="true" returntype="array" returnformat="json">
+	<cfargument name="urlEncodedBrainfuck" />
+	<cfargument name="debug" required="false" default="false" />
+	<cfscript>
+	 var fuck = urldecode(arguments.urlEncodedBrainfuck);
+	 execute(fuck);
+	 return brainFuckBuffer;
+	 //if(getDebug()) printDebug();
+	</cfscript>
+</cffunction>
+
+
 
 <cffunction name="__throw">
  <cfargument name="message" />
@@ -137,18 +177,6 @@
  <cfthrow type="BrainfuckParserException" message="#arguments.message#" detail="#arguments.detail#" />
 </cffunction>
 
-<cffunction name="exec" access="public" output="true">
-	<cfargument name="urlEncodedBrainfuck" />
-	<cfargument name="debug" required="false" default="false" />
-	<cfscript>
-	 var fuck = urldecode(arguments.urlEncodedBrainfuck);
-	 brainBugger.__dump(fuck);
-	 setDebug(arguments.debug);
-
-	 execute( fuck );
-	 if(getDebug()) printDebug();
-	</cfscript>
-</cffunction>
 
 <cffunction name="printDebug">
  <cfscript>

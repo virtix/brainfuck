@@ -3,6 +3,28 @@
     <cfinclude template="brainfuck-data.cfm">
 
 <cfscript>
+  
+  function testExecReturnsArray(){
+    var actual = bf.exec(urlencodedformat(hw));
+    debug(actual);
+  }
+    
+  function collectShouldAddBytes(){
+    bf.collect(1);
+    bf.collect(2);
+    bf.collect(3);
+    bf.collect(4);
+    bf.collect(5);
+    debug(bf.getBrainfuckBuffer());
+    assertEquals(5, bf.getBrainfuckBuffer().size() );
+  }  
+  
+   function brainfuckBufferShouldHaveAnA(){
+    var list = bf.interpret(a);
+    var actual = bf.getBrainfuckBuffer();
+    debug(actual);
+    assertEquals('A',actual[1]);
+  }  
 
  function testURLEncodedInput(){
   s = urlencodedformat(a);
@@ -49,21 +71,28 @@
   function testALoop(){
 	bf.execute(A);
 	bf.printDebug();
+	actual = bf.getBrainfuckBuffer();
+	assertEquals('A',actual[1]);
   }
 
    function testPrint100(){
 	bf.execute(_100);
+	debug(bf.getBrainfuckBuffer());
 	bf.printDebug();
   }
 
   function testHelloWorld(){
-	 bf.execute(hw);
+	 bf.interpret(hw);
 	 bf.printDebug();
 }
 
   function testHelloWorld2(){
-	 bf.execute(hw2);
+	 bf.interpret(hw2);
+	 actual = bf.getBrainfuckBuffer();
+	 debug(actual);
 	 bf.printDebug();
+	 assertTrue( actual.size() ,'empty results?' );
+	 assertEquals( '!', actual[12], 'weird results' );
   }
 
   function testInternalLoopLogic(){
