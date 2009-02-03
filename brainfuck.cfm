@@ -25,6 +25,9 @@
    if(textArea.value=='[Enter Brainfuck code here]')textArea.value='';
   }
 
+  function clearOutput(){
+   $('#brainfucked').html('');
+  }
 
   function fuckme(){
     var bfObjt = document.getElementById('src');
@@ -74,8 +77,8 @@
 				 <input type="radio" name="debug" value="false" checked="true"> No
 
         <p><hr size="1" noshade="true" color="#eaeaea" width="95%" /></p>
-        <h4>Brainfucked:</h4>
-				<pre id="brainfucked" style="width:100%" rows="8"  style="font-size:11px;font-face:courier"></pre>
+        <h4>Brainfucked Console: <input type="button" value="Clear Console" onclick="clearOutput()" /></h4>
+				<pre id="brainfucked" style="width:100%;border:1px ridge gray;background-color:whitesmoke;height:20%;overflow:scroll" rows="8"  style="font-size:11px;font-face:courier"></pre>
         </p>
 
     </div>
