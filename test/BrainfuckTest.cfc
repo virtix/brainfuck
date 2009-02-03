@@ -3,12 +3,18 @@
     <cfinclude template="brainfuck-data.cfm">
 
 <cfscript>
-  
-  function testExecReturnsArray(){
-    var actual = bf.exec(urlencodedformat(hw));
-    debug(actual);
+
+  function $UrlEncodedFormatCharSets(){
+   var s = '%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.';
+   debug(urldecode(s,'us-ascii'));
   }
-    
+
+  function testExecReturnsArray(){
+    var actual = bf.exec('%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.');
+    debug(actual);
+    assertEquals(13,actual.size());
+  }
+
   function collectShouldAddBytes(){
     bf.collect(1);
     bf.collect(2);
@@ -17,14 +23,14 @@
     bf.collect(5);
     debug(bf.getBrainfuckBuffer());
     assertEquals(5, bf.getBrainfuckBuffer().size() );
-  }  
-  
+  }
+
    function brainfuckBufferShouldHaveAnA(){
     var list = bf.interpret(a);
     var actual = bf.getBrainfuckBuffer();
     debug(actual);
     assertEquals('A',actual[1]);
-  }  
+  }
 
  function testURLEncodedInput(){
   s = urlencodedformat(a);

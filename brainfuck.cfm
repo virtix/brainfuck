@@ -24,41 +24,33 @@
    if(textArea.value=='[Enter Brainfuck code here]')textArea.value='';
   }
 
+
   function fuckme(){
-    bf = document.getElementById('src');
-    //alert(escape('[>+++++<-]]'));
+    var bfObjt = document.getElementById('src');
+    var bf = bfObjt.value;
+    console.log(bf);
     //p = escape('+++++++++++++[>+++++<-]>.');
-    //alert(p);
-    //return;
-    p = '%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.';
-    u = 'Brainfuck.cfc?method=exec&urlEncodedBrainfuck=' + p;
-    //$("#brainfucked").load(u);
-
-$.ajax({
-    url: u ,
-    type: 'get',
-    dataType: 'json',
-    timeout: 1000,
-    error: function(x){
-        alert(x.responseXML);
-    },
-    success: function(data){
-    	alert(data);
-    	/*
-         $('#brainfucked')
-            .html(data)
-        */   
-    }
-});
-
-
+    //p = '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.';
+    bf = escape(bf);
+    bf = bf.replace(/\+/g,'%2B');
+    console.log('bf afterparse : ' + bf);
+    u = 'Brainfuck.cfc?method=exec&urlEncodedBrainfuck=' + bf;
+    console.log(u);
+  $.getJSON(u,
+        function(data){
+         $.each(data, function(i,item){
+             $('#brainfucked')
+            .append(item);
+          });
+        });
   }
-
  </script>
 
 </head>
 <body>
-  <h2 align="center" style="color:silver">Brainfuck Interpreter written in ColdFusion 8</h2>
+  <h2 align="center" style="color:silver">Brainfuck Interpreter written in ColdFusion 8
+	<div id="sub" align="center" style="font-size:12px;color:gray">&quot;Why? Because it's there.&quot;</div>
+	</h2>
   <div id="brainfuck">
    <ul>
         <li><a href="#interpret"><span>Interpreter</span></a></li>
@@ -68,15 +60,21 @@ $.ajax({
 
     <div id="interpret">
         <p>
-        <textarea id="src" style="width:100%" rows="10" onclick="removeDefault(this)">[Enter Brainfuck code here]</textarea><br />
+        <textarea id="src" style="width:100%" rows="8" onclick="removeDefault(this)">++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.</textarea><br />
          Or, load from file: <input id="bffile" size="40" type="file">
          <input type="button" value="Load BF" />
          <input type="button" value="Run" onclick="fuckme()" />
 				 <input type="button" value="Reset" onclick="location.href='brainfuck.cfm'" />
+				 &nbsp;&nbsp;&nbsp;
+				 Show Debug:
+
+				 <input type="radio" name="debug" value="true"> Yes
+
+				 <input type="radio" name="debug" value="false" checked="true"> No
 
         <p><hr size="1" noshade="true" color="#eaeaea" width="95%" /></p>
         <h4>Brainfucked:</h4>
-				<textarea id="brainfucked" style="width:100%" rows="10"  style="font-size:11px;font-face:courier"></textarea>
+				<pre id="brainfucked" style="width:100%" rows="8"  style="font-size:11px;font-face:courier"></pre>
         </p>
 
     </div>
@@ -92,7 +90,7 @@ $.ajax({
    <cfinclude template="Apache-2.0.license">
     </pre>
    </div>
-</div>
+</div><br />
 <div align="center">UI compliments of <a href="http://jquery.com">JQuery</a></div>
 </body>
 </html>

@@ -1,7 +1,29 @@
 <cfcomponent output="true">
 <cfsetting showdebugoutput="false">
-  <cfscript>
 
+<!---
+   Remote entry point. Still need to address debug output. Hmmmm...
+	 Debug is an array. Maybe give remote json access to the debug array.
+ --->
+<cffunction name="exec" access="remote" output="true" returntype="array" returnformat="json">
+	<cfargument name="urlEncodedBrainfuck" />
+	<cfargument name="debug" required="false" default="false" />
+  <cfscript>
+	 var fuck = arguments.urlEncodedBrainfuck;
+	 execute(fuck);
+	 logit('string value : ' & stringValue());
+	 return brainFuckBuffer;
+	 //if(getDebug()) printDebug(); ???
+	</cfscript>
+</cffunction>
+<cffunction name="logit">
+ <cfargument name="message">
+ <cflog application="true" type="information" text="#message#">
+</cffunction>
+
+
+  <cfscript>
+  //Instance members
      raw = '';
      program = [];
      brainFuckBuffer = []; //results cache
@@ -17,6 +39,11 @@
     return this;
   }
 
+  //Main entry point. execute() now just collects
+  function interpret(code){
+    execute(code);
+    print();
+  }
 
   function execute(bytes){
 		var byte =  chr(0);
@@ -98,29 +125,10 @@
      if( pc > 100 || pc < 0) __throw('Range error','loops can kill');
 
     }//end for
-   
+
   }//end execute
 
-  function interpret(code){
-    execute(code);
-    print();
-  }
-  
-  function collect(byte){
-    brainFuckBuffer.add(chr(byte));
-  }
-  
-  function getBrainfuckBuffer(){
-    return brainFuckBuffer;
-  }
 
-  function print(){
-   var i = 1;
-   for(i; i <= brainFuckBuffer.size();i++){
-     writeoutput(brainFuckBuffer[i]);
-   }
-  }
-  
  //do only once
   function initProgram(code){
     var i = 1;
@@ -141,9 +149,32 @@
     return bytes;
   }
 
+  function collect(byte){
+    brainFuckBuffer.add(chr(byte));
+  }
+
+  function getBrainfuckBuffer(){
+    return brainFuckBuffer;
+  }
+
+  function print(){
+   var i = 1;
+   for(i; i <= brainFuckBuffer.size();i++){
+     writeoutput(brainFuckBuffer[i]);
+   }
+  }
+
+  function stringValue(){
+   var i = 1;
+   var s = '';
+   for(i; i <= brainFuckBuffer.size();i++){
+     s &= brainFuckBuffer[i];
+   }
+   return s;
+  }
 
 
-  function setDebug(flag){
+ function setDebug(flag){
     debugFlag = flag;
   }
 
@@ -157,18 +188,6 @@
 
 
 </cfscript>
-
-<cffunction name="exec" access="remote" output="true" returntype="array" returnformat="json">
-	<cfargument name="urlEncodedBrainfuck" />
-	<cfargument name="debug" required="false" default="false" />
-	<cfscript>
-	 var fuck = urldecode(arguments.urlEncodedBrainfuck);
-	 execute(fuck);
-	 return brainFuckBuffer;
-	 //if(getDebug()) printDebug();
-	</cfscript>
-</cffunction>
-
 
 
 <cffunction name="__throw">
