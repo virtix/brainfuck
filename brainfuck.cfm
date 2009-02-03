@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
  <title>Brainfuck Interpretter for ColdFusion</title>
- <link type="text/css" href="resources/ui.all.css" rel="Stylesheet" />
- <script type="text/javascript" src="resources/jquery-1.3.1.min.js"></script>
+  <link rel="icon" type="image/png" href="favicon.ico"/>
+  <link type="text/css" href="resources/ui.all.css" rel="Stylesheet" />
+  <script type="text/javascript" src="resources/jquery-1.3.1.min.js"></script>
 	<script type="text/javascript" src="resources/jquery.ui.all.js"></script>
 	<style type="text/css">
 		body{ font: 62.5% Verdana, sans-serif; background-color:darkred }
