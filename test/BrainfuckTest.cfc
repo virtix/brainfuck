@@ -4,9 +4,35 @@
 
 <cfscript>
 
+  function $getDebugAsArrayShouldReturnOneArrayElement(){
+   bf.execute(a);
+   debugArray = bf.getDebugAsArray();
+   debug(debugArray);
+   assertEquals(1,debugArray.size());
+
+  }
+
+  function $getDebugAsArrayShouldReturnOneArrayElementEvenWhenDebugIsFalse(){
+   bf.setDebug(false);
+   bf.execute(a);
+   debugArray = bf.getDebugAsArray();
+   debug(debugArray);
+   assertEquals(1,debugArray.size());
+
+  }
+
+  function $infinitRecursionShouldDie(){
+    try{
+     bf.execute('+[]');
+     fail('Should not get here');
+    }
+    catch(BrainfuckParserException e){debug(e);}
+  }
+
   function $UrlEncodedFormatCharSets(){
    var s = '%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B%2B.';
-   debug(urldecode(s,'us-ascii'));
+   debug(urldecode(s,'us-ascii')) ;
+   assert(urldecode(s,'us-ascii') is '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.');
   }
 
   function testExecReturnsArray(){

@@ -9,13 +9,56 @@
 	<cfargument name="urlEncodedBrainfuck" />
 	<cfargument name="debug" required="false" default="false" />
   <cfscript>
-	 var fuck = arguments.urlEncodedBrainfuck;
-	 execute(fuck);
-	 logit('string value : ' & stringValue());
-	 return brainFuckBuffer;
-	 //if(getDebug()) printDebug(); ???
+	 var fuckit = arguments.urlEncodedBrainfuck;
+	 var error = [];
+	 try{
+	 	setDebug(debug);
+	  execute(fuckit);
+	  brainFuckBuffer.add(getDebugAsString());
+	  logit('string value after interpretation: ' & stringValue());
+	  return brainFuckBuffer;
+	 }
+	 catch(any e){
+	  error[1] = e.getType();
+	  error[2] = e.getMessage();
+	  error[3] = e.getDetail();
+	  error[4] = 'Check Brainfuck log for details';
+	  return error;
+	 }
+
 	</cfscript>
 </cffunction>
+
+
+<cffunction name="getDebugAsString" access="remote" returntype="string">
+	<cfset var debugHTML = '' />
+	<cfif !debugFlag>
+	 <cfset debugHTML = '<p><strong>Warning</strong>: Looks like setDebug() is false. Set it to true to capture debug data.</p>' />
+	 <cfreturn debugHTML />
+	</cfif>
+
+  <cfsavecontent variable="debugHTML">
+   <cfset brainBugger.printDebug() />
+	</cfsavecontent>
+	<cfreturn debugHTML />
+</cffunction>
+
+
+<cffunction name="getDebugAsArray" access="remote" returntype="Array" returnformat="json">
+  <cfset var debugArray = [] />
+	<cfset var debugHTML = '' />
+	<cfif !debugFlag>
+	 <cfset debugArray.add('<p><strong>Warning</strong>: Looks like setBug() is false. Set it to true to capture debug data.</p>') />
+	 <cfreturn debugArray />
+	</cfif>
+
+  <cfsavecontent variable="debugHTML">
+   <cfset brainBugger.printDebug() />
+	</cfsavecontent>
+	<cfset debugArray.add(debugHTML) />
+	<cfreturn debugArray />
+</cffunction>
+
 <cffunction name="logit">
  <cfargument name="message">
  <cflog application="true" type="information" text="#message#">
@@ -33,6 +76,8 @@
      outputFormat = 'text';
      parser = createObject('component','BrainfuckParser');
      brainBugger = createObject('component','BrainfuckDebugger');
+     guard = 0;
+     MAX_RECURSION_ATTEMPTS = 2048;
 
   function init(debug){
     setDebug(debug);
@@ -50,6 +95,8 @@
 		var pos = {};
 		var tempBytes = [];
 		var i = 1;
+
+    if(guard++ > MAX_RECURSION_ATTEMPTS) __throw('Possible Infinite Recursion Caught','Recursion iterations exceeded #MAX_RECURSION_ATTEMPTS#. You can increase the MAX_RECURSION_ATTEMPTS in Brainfuck.cfc.');
 
    if(!isInitialized) {
       bytes = initProgram(bytes);
@@ -121,8 +168,6 @@
        break;
 
       }//end swicth
-
-     if( pc > 100 || pc < 0) __throw('Range error','loops can kill');
 
     }//end for
 
@@ -203,6 +248,8 @@
     brainBugger.printDebug();
   </cfscript>
 </cffunction>
+
+
 
 </cfcomponent>
 

@@ -27,26 +27,31 @@
 
   function clearOutput(){
    $('#brainfucked').html('');
+   $('#debug').html('');
   }
 
   function fuckme(){
     var bfObjt = document.getElementById('src');
     var bf = bfObjt.value;
+    var debug = $("input[@name='debugFlag']:checked").val();
+    console.log(debug);
     console.log(bf);
-    //p = escape('+++++++++++++[>+++++<-]>.');
-    //p = '++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.';
     bf = escape(bf);
-    bf = bf.replace(/\+/g,'%2B');
+    bf = bf.replace(/\+/g,'%2B'); //need to replace +'s with %2B
     console.log('bf afterparse : ' + bf);
-    u = 'Brainfuck.cfc?method=exec&urlEncodedBrainfuck=' + bf;
+    u = 'Brainfuck.cfc?method=exec&debug=' + debug + '&urlEncodedBrainfuck=' + bf;
     console.log(u);
-  $.getJSON(u,
-        function(data){
-         $.each(data, function(i,item){
-             $('#brainfucked')
-            .append(item);
-          });
-        });
+    clearOutput();
+	  $.getJSON(u,
+	        function(data){
+	         $.each(data, function(i,item){
+	             if(i == data.length-1) {
+	              $('#debug').append(item);
+	              return;
+	             }
+	             $('#brainfucked').append(item);
+	          });
+	        });
   }
  </script>
 
@@ -58,30 +63,37 @@
   <div id="brainfuck">
    <ul>
         <li><a href="#interpret"><span>Interpreter</span></a></li>
+				<li><a href="#debug"><span>Debug</span></a></li>
         <li><a href="#linx"><span>Brainfuck Resources</span></a></li>
         <li><a href="#license"><span>License</span></a></li>
     </ul>
 
-    <div id="interpret">
+    <div id="interpret" align="center">
         <p>
         <textarea id="src" style="width:100%" rows="8" onclick="removeDefault(this)">++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.</textarea><br />
-         Or, load from file: <input id="bffile" size="40" type="file">
+       <!---
+			   @To Do
+			   Or, load from file: <input id="bffile" size="40" type="file">
          <input type="button" value="Load BF" />
+				--->
          <input type="button" value="Run" onclick="fuckme()" />
-				 <input type="button" value="Reset" onclick="location.href='brainfuck.cfm'" />
+				 <input type="button" value="Reload Page" onclick="location.href='brainfuck.cfm'" />
 				 &nbsp;&nbsp;&nbsp;
 				 Show Debug:
 
-				 <input type="radio" name="debug" value="true"> Yes
+				 <input type="radio" name="debugFlag" value="true"> Yes
+				 <input type="radio" name="debugFlag" value="false" checked="true"> No
 
-				 <input type="radio" name="debug" value="false" checked="true"> No
 
-        <p><hr size="1" noshade="true" color="#eaeaea" width="95%" /></p>
-        <h4>Brainfucked Console: <input type="button" value="Clear Console" onclick="clearOutput()" /></h4>
-				<pre id="brainfucked" style="width:100%;border:1px ridge gray;background-color:whitesmoke;height:20%;overflow:scroll" rows="8"  style="font-size:11px;font-face:courier"></pre>
-        </p>
-
+		 <div id="brainfuckconsole" align="left">
+			 <h4>Brainfucked Console: <input type="button" value="Clear Console" onclick="clearOutput()" /></h4>
+				<pre id="brainfucked" style="width:100%;border:1px ridge gray;background-color:whitesmoke;height:20%;overflow:auto" rows="8"  style="font-size:11px;font-face:courier"></pre>
     </div>
+    </div>
+
+
+		<div id="debug"></div>
+
     <div id="linx">
     <ul>
      <li>http://daniel.lorch.cc/projects/brainfuck/php-brainfuck-1.01/doc.html</li>
@@ -94,7 +106,9 @@
    <cfinclude template="Apache-2.0.license">
     </pre>
    </div>
-</div><br />
+</div>
+
+<br />
 <div align="center">UI compliments of <a href="http://jquery.com">JQuery</a></div>
 </body>
 </html>
