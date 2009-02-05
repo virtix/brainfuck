@@ -36,7 +36,6 @@
 	 <cfset debugHTML = '<p><strong>Warning</strong>: Looks like setDebug() is false. Set it to true to capture debug data.</p>' />
 	 <cfreturn debugHTML />
 	</cfif>
-
   <cfsavecontent variable="debugHTML">
    <cfset brainBugger.printDebug() />
 	</cfsavecontent>
@@ -46,16 +45,7 @@
 
 <cffunction name="getDebugAsArray" access="remote" returntype="Array" returnformat="json">
   <cfset var debugArray = [] />
-	<cfset var debugHTML = '' />
-	<cfif !debugFlag>
-	 <cfset debugArray.add('<p><strong>Warning</strong>: Looks like setBug() is false. Set it to true to capture debug data.</p>') />
-	 <cfreturn debugArray />
-	</cfif>
-
-  <cfsavecontent variable="debugHTML">
-   <cfset brainBugger.printDebug() />
-	</cfsavecontent>
-	<cfset debugArray.add(debugHTML) />
+	<cfset debugArray.add(getDebugAsString()) />
 	<cfreturn debugArray />
 </cffunction>
 

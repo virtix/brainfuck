@@ -86,7 +86,7 @@
 
 
 		 <div id="brainfuckconsole" align="left">
-			 <h4>Brainfucked Console: <input type="button" value="Clear Console" onclick="clearOutput()" /></h4>
+			 <h4>Brainfucked Console: <input type="button" value="Clear Console and Debug" onclick="clearOutput()" /></h4>
 				<pre id="brainfucked" style="width:100%;border:1px ridge gray;background-color:whitesmoke;height:20%;overflow:auto" rows="8"  style="font-size:11px;font-face:courier"></pre>
     </div>
     </div>
@@ -96,9 +96,11 @@
 
     <div id="linx">
     <ul>
-     <li>http://daniel.lorch.cc/projects/brainfuck/php-brainfuck-1.01/doc.html</li>
-     <li>http://www.iwriteiam.nl/Ha_BF.html</li>
-     <li>Link #3</li>
+		 <li><a href="http://www.esolangs.org/wiki/Brainfuck">http://www.esolangs.org/wiki/Brainfuck</a></li>
+     <li><a href="http://daniel.lorch.cc/projects/brainfuck/php-brainfuck-1.01/doc.html">http://daniel.lorch.cc/projects/brainfuck/php-brainfuck-1.01/doc.html</a></li>
+     <li><a href="http://www.iwriteiam.nl/Ha_BF.html">http://www.iwriteiam.nl/Ha_BF.html</a></li>
+     <li><a href="http://aminet.net/dev/lang/brainfuck-2.readme">Original README by Urban Müller</a></li>
+		<li><a href="http://main.aminet.net/dev/lang/brainfuck-2.lha">Orginal Distribution by Urban Müller</a></li>
     </ul>
     </div>
     <div id="license">
